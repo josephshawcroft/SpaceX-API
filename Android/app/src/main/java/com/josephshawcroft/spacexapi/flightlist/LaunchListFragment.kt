@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.observe
 import com.josephshawcroft.spacexapi.BaseFragment
+import com.josephshawcroft.spacexapi.R
 import com.josephshawcroft.spacexapi.databinding.FragmentLaunchListBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -13,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
 
     private lateinit var viewModel: LaunchListViewModel
+    private val adapter = LaunchListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +26,10 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
         savedInstanceState: Bundle?
     ): View = FragmentLaunchListBinding.inflate(inflater, container, false).run {
         setBinding()
+
         viewModel.fetchPageData()
+
+        binding.userList.adapter = adapter
 
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -47,7 +52,18 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
     }
 
     private fun showLoadedState(state: ViewState.Loaded) {
+        val companyInfo = state.companyInfo
         binding.errorText.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
+        binding.companyInfoTextView.text = binding.root.context.getString(
+            R.string.company_info_text,
+            companyInfo.name,
+            companyInfo.founder,
+            companyInfo.founded,
+            companyInfo.employees,
+            companyInfo.launchSites,
+            companyInfo.valuation
+        )
+        adapter.updateList(state.launchesList)
     }
 }
