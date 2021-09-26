@@ -1,22 +1,4 @@
 <resources>
-    <string name="app_name">Stack Exchange App</string>
-    <string name="user_name">User Name:</string>
-    <string name="reputation">Reputation:</string>
-    <string name="badges">Badges:</string>
-    <string name="location">Location:</string>
-    <string name="age">Account Age:</string>
-    <string name="not_specified">Not Specified</string>
-    <string name="creation_date">Creation Date:</string>
-    <string name="enter_a_search_query">Enter a search query</string>
-    <string name="user_profile_picture">User profile picture</string>
-    <string name="bronze">Bronze: %d</string>
-    <string name="silver">Silver: %d</string>
-    <string name="gold">Gold: %d</string>
-    <string name="user_item_chevron">User Item Chevron</string>
-    <string name="search_button">Search Button</string>
+    <string name="app_name">SpaceX</string>
     <string name="network_error">Network error. Please try again later.</string>
-    <plurals name="days">
-        <item quantity="one">%d day old</item>
-        <item quantity="other">%d days old</item>
-    </plurals>
 </resources>

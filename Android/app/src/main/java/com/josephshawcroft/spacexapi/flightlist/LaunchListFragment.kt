@@ -25,9 +25,29 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
     ): View = FragmentLaunchListBinding.inflate(inflater, container, false).run {
         setBinding()
         viewModel.fetchPageData()
-        viewModel.viewState.observe(viewLifecycleOwner, { state ->
-            //TODO
-        })
+
+        viewModel.viewState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is ViewState.Loading -> showLoadingState()
+                is ViewState.Loaded -> showLoadedState(state)
+                is ViewState.Error -> showErrorState()
+            }
+        }
         root
+    }
+
+    private fun showLoadingState() {
+        binding.errorText.visibility = View.INVISIBLE
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun showErrorState() {
+        binding.errorText.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private fun showLoadedState(state: ViewState.Loaded) {
+        binding.errorText.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
     }
 }
