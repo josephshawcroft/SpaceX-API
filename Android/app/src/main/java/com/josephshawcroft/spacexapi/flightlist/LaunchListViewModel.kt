@@ -2,13 +2,13 @@ package com.josephshawcroft.spacexapi.flightlist
 
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.josephshawcroft.spacexapi.repository.LaunchListRepository
 import com.josephshawcroft.spacexapi.utils.ioToMainScheduler
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 
 interface LaunchListViewModel {
 
@@ -39,7 +39,13 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
     }
 
     override fun fetchRockets() {
-
+        repository.fetchRockets()
+            .ioToMainScheduler()
+            .subscribe({ list ->
+                Log.d("test", list.toString())
+            }, {
+                Log.e("test", it.message.toString())
+            }).addToDisposables()
     }
 
     override fun onCleared() {
