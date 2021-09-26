@@ -21,9 +21,13 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentLaunchListBinding.inflate(inflater, container, false)
-        setBinding(binding)
-        return binding.root
+    ): View = FragmentLaunchListBinding.inflate(inflater, container, false).run {
+        setBinding()
+        root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchLaunches()
     }
 }

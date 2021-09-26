@@ -1,6 +1,5 @@
 package com.josephshawcroft.spacexapi.network
 
-import io.reactivex.Single
 import retrofit2.Retrofit
 import javax.inject.Inject
 

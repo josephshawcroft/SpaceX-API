@@ -27,12 +27,12 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "API_URL", '"https://www.example.com"')
+            buildConfigField("String", "API_URL", '"https://api.spacexdata.com"')
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "API_URL", '"https://www.example.com"')
+            buildConfigField("String", "API_URL", '"https://api.spacexdata.com"')
         }
     }
     viewBinding {
@@ -74,8 +74,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 
     // Miscelleanous
     implementation 'io.coil-kt:coil:0.11.0'

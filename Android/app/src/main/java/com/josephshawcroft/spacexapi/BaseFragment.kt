@@ -10,8 +10,8 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         get() = _binding
             ?: throw RuntimeException("Don't call getBinding() without first calling setBinding()")
 
-    fun setBinding(binding: T) {
-        _binding = binding
+    protected fun T.setBinding() {
+        _binding = this
     }
 
     override fun onDestroyView() {
