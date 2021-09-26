@@ -1,14 +1,14 @@
 package com.josephshawcroft.spacexapi.repository
 
-import com.josephshawcroft.spacexapi.data.api.RocketResponse
 import com.josephshawcroft.spacexapi.data.model.Launch
+import com.josephshawcroft.spacexapi.data.model.Rocket
 import com.josephshawcroft.spacexapi.network.LaunchesService
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
 interface LaunchListRepository {
     fun fetchLaunches(): Single<List<Launch>>
-    fun fetchRockets(): Single<List<RocketResponse>>
+    fun fetchRockets(): Single<List<Rocket>>
 }
 
 internal class LaunchListRepositoryImpl @Inject constructor(private val launchesService: LaunchesService) :
@@ -26,6 +26,14 @@ internal class LaunchListRepositoryImpl @Inject constructor(private val launches
             }
         }
 
-    override fun fetchRockets(): Single<List<RocketResponse>> =
-        launchesService.fetchRockets()
+    override fun fetchRockets(): Single<List<Rocket>> =
+        launchesService.fetchRockets().map { response ->
+            response.map {
+                Rocket(
+                    it.id,
+                    it.name,
+                    it.type
+                )
+            }
+        }
 }
