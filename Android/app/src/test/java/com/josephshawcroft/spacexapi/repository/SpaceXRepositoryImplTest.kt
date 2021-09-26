@@ -1,6 +1,8 @@
 package com.josephshawcroft.spacexapi.repository
 
 import com.josephshawcroft.spacexapi.data.api.CompanyInfoResponse
+import com.josephshawcroft.spacexapi.data.api.LaunchResponse
+import com.josephshawcroft.spacexapi.data.api.RocketResponse
 import com.josephshawcroft.spacexapi.network.SpaceXApiService
 import io.mockk.every
 import io.mockk.mockk
@@ -14,7 +16,7 @@ class SpaceXRepositoryImplTest {
     private var spaceXRepository = SpaceXRepositoryImpl(spaceXApiService)
 
     @Test
-    fun givenRepository_whenFetchCompanyCalled_thenCompanyInfoCreated() {
+    fun givenRepository_whenFetchCompanyCalled_thenCompanyInfoCreatedAndPropertiesCorrect() {
 
         val companyInfoResponse = CompanyInfoResponse(
             employees = 20,
@@ -39,7 +41,76 @@ class SpaceXRepositoryImplTest {
         }
     }
 
-    fun testFetchLaunches() {}
+    @Test
+    fun givenRepository_whenFetchLaunchesCalled_thenLaunchObjectsCreatedAndPropertiesCorrect() {
 
-    fun testFetchRockets() {}
+        val launchesResponse = listOf(
+            LaunchResponse(
+                date_utc = "2007-03-21T01:10:00.000Z",
+                id = "5eb87cdaffd86e000604b32b",
+                name = "Mega mission",
+                rocket = "2gfdusnak",
+                success = true
+            ),
+            LaunchResponse(
+                date_utc = "2017-03-31T01:10:00.000Z",
+                id = "42udnaffd86e000604b32b",
+                name = "Sad mission",
+                rocket = "id_2tndi9",
+                success = false
+            ),
+            LaunchResponse(
+                date_utc = "2011-11-11T01:10:00.000Z",
+                id = "y2mclamcbvoa",
+                name = "Skyrim mission",
+                rocket = "isssssss_2tndi9",
+                success = true
+            )
+        )
+
+        every { spaceXApiService.fetchLaunches() } returns Single.just(launchesResponse)
+
+        val launches = spaceXRepository.fetchLaunches().blockingGet()
+        launches.forEachIndexed { index, launch ->
+            val launchResponse = launchesResponse[index]
+            with(launch) {
+                assertThat(missionName).isEqualTo(launchResponse.name)
+                assertThat(missionDate).isEqualTo(launchResponse.date_utc)
+                assertThat(rocketId).isEqualTo(launchResponse.rocket)
+            }
+        }
+    }
+
+    @Test
+    fun givenRepository_whenFetchRocketsCalled_thenRocketsObjectsCreatedAndPropertiesCorrect() {
+        val rocketsResponse = listOf(
+            RocketResponse(
+                id = "5eb87cdaffd86e000604b32b",
+                name = "Mega rocket",
+                type = "Super duper type"
+            ),
+            RocketResponse(
+                id = "42udnaffd86e000604b32b",
+                name = "Sad rocket",
+                type = "Super terrible type"
+            ),
+            RocketResponse(
+                id = "y2mclamcbvoa",
+                name = "Skyrim rocket",
+                type = "Super cool type"
+            )
+        )
+
+        every { spaceXApiService.fetchRockets() } returns Single.just(rocketsResponse)
+
+        val rockets = spaceXRepository.fetchRockets().blockingGet()
+        rockets.forEachIndexed { index, rocket ->
+            val rocketResponse = rocketsResponse[index]
+            with(rocket) {
+                assertThat(id).isEqualTo(rocketResponse.id)
+                assertThat(name).isEqualTo(rocketResponse.name)
+                assertThat(type).isEqualTo(rocketResponse.type)
+            }
+        }
+    }
 }
