@@ -1,9 +1,10 @@
 package com.josephshawcroft.spacexapi.flightlist
 
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.josephshawcroft.spacexapi.data.Response
+import com.josephshawcroft.spacexapi.data.Response.*
+import com.josephshawcroft.spacexapi.data.model.CompanyInfo
 import com.josephshawcroft.spacexapi.data.model.Launch
 import com.josephshawcroft.spacexapi.data.model.LaunchWithRocketInfo
 import com.josephshawcroft.spacexapi.data.model.Rocket
@@ -14,10 +15,13 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.BiFunction
 
+typealias LaunchesList = List<LaunchWithRocketInfo>
+
 interface LaunchListViewModel {
 
-    val launches: LiveData<Response<LaunchWithRocketInfo>>
+    val launches: LiveData<Response<LaunchesList>>
 
+    fun fetchCompanyInfo()
     fun fetchLaunchList()
 
     companion object {
@@ -31,51 +35,42 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
 ) : ViewModel(), LaunchListViewModel {
 
     private var compositeDisposable = CompositeDisposable()
-    private val _launches = MutableLiveData<Response<LaunchWithRocketInfo>>(Response.NotYetLoaded())
-    override val launches: LiveData<Response<LaunchWithRocketInfo>>
+    private val _launches = MutableLiveData<Response<LaunchesList>>(NotYetLoaded())
+    override val launches: LiveData<Response<LaunchesList>>
         get() = _launches
 
+    private val _companyInfo = MutableLiveData<Response<CompanyInfo>>(NotYetLoaded())
+
+    override fun fetchCompanyInfo() {
+        repository.fetchCompanyInfo()
+            .ioToMainScheduler()
+            .doOnSubscribe { _companyInfo.value = IsLoading() }
+            .subscribe({
+                _companyInfo.postValue(Success(it))
+            }, {
+                _companyInfo.postValue(Error(it))
+            })
+    }
+
     override fun fetchLaunchList() {
-        Single.zip<List<Launch>, List<Rocket>, List<LaunchWithRocketInfo>>(
-            fetchLaunches(),
-            fetchRockets(),
+        Single.zip<List<Launch>, List<Rocket>, LaunchesList>(
+            repository.fetchLaunches(),
+            repository.fetchRockets(),
             BiFunction { launches, rockets ->
                 launches.map { launch ->
-                    val rocket = rockets.first { launch.rocketName == it.id }
+                    val rocket = rockets.first { launch.rocketId == it.id } //TODO
                     LaunchWithRocketInfo(launch, rocket)
                 }
             })
             .ioToMainScheduler()
+            .doOnSubscribe { _launches.value = IsLoading() }
             .subscribe({
-
+                _launches.postValue(Success(it))
             }, {
-
+                _launches.postValue(Error(it.cause))
             })
-
+            .addToDisposables()
     }
-
-    fun fetchLaunch() {
-        repository.fetchLaunches()
-            .ioToMainScheduler()
-            .subscribe({ list ->
-                Log.d("test", list.toString())
-            }, {
-                Log.e("test", it.message.toString())
-            }).addToDisposables()
-    }
-
-    fun fetchRocket() {
-        repository.fetchRockets()
-            .ioToMainScheduler()
-            .subscribe({ list ->
-                Log.d("test", list.toString())
-            }, {
-                Log.e("test", it.message.toString())
-            }).addToDisposables()
-    }
-
-    private fun fetchLaunches() = repository.fetchLaunches()
-    private fun fetchRockets() = repository.fetchRockets()
 
     override fun onCleared() {
         compositeDisposable.dispose()

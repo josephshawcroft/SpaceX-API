@@ -29,5 +29,6 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
     override fun onResume() {
         super.onResume()
         viewModel.fetchLaunchList()
+        viewModel.fetchCompanyInfo()
     }
 }
