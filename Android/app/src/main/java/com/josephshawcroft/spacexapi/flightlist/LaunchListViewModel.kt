@@ -1,5 +1,6 @@
 package com.josephshawcroft.spacexapi.flightlist
 
+import androidx.annotation.VisibleForTesting
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.josephshawcroft.spacexapi.data.Response
@@ -9,6 +10,7 @@ import com.josephshawcroft.spacexapi.data.model.Launch
 import com.josephshawcroft.spacexapi.data.model.LaunchWithRocketInfo
 import com.josephshawcroft.spacexapi.data.model.Rocket
 import com.josephshawcroft.spacexapi.repository.SpaceXRepository
+import com.josephshawcroft.spacexapi.utils.CombinedLiveData
 import com.josephshawcroft.spacexapi.utils.ioToMainScheduler
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -19,9 +21,14 @@ typealias LaunchesList = List<LaunchWithRocketInfo>
 
 interface LaunchListViewModel {
 
-    val launches: LiveData<Response<LaunchesList>>
+    val viewState: LiveData<ViewState>
 
+    fun fetchPageData()
+
+    @VisibleForTesting
     fun fetchCompanyInfo()
+
+    @VisibleForTesting
     fun fetchLaunchList()
 
     companion object {
@@ -31,15 +38,42 @@ interface LaunchListViewModel {
 }
 
 internal class LaunchListViewModelImpl @ViewModelInject constructor(
-    private val repository: SpaceXRepository
+    private val repository: SpaceXRepository,
+    @VisibleForTesting val compositeDisposable: CompositeDisposable
 ) : ViewModel(), LaunchListViewModel {
 
-    private var compositeDisposable = CompositeDisposable()
-    private val _launches = MutableLiveData<Response<LaunchesList>>(NotYetLoaded())
-    override val launches: LiveData<Response<LaunchesList>>
+    private val _launches = MutableLiveData<Response<LaunchesList>>()
+
+    @VisibleForTesting
+    val launches
         get() = _launches
 
-    private val _companyInfo = MutableLiveData<Response<CompanyInfo>>(NotYetLoaded())
+    private val _companyInfo = MutableLiveData<Response<CompanyInfo>>()
+
+    @VisibleForTesting
+    val companyInfo
+        get() = _companyInfo
+
+    override val viewState: LiveData<ViewState> =
+        CombinedLiveData<Response<LaunchesList>, Response<CompanyInfo>, ViewState>(
+            _launches,
+            _companyInfo
+        ) { launches, company ->
+            when {
+                launches is IsLoading || company is IsLoading -> ViewState.Loading
+                launches is Error || company is Error -> ViewState.Error
+                launches is Success && company is Success -> ViewState.Loaded(
+                    company.data,
+                    launches.data
+                )
+                else -> ViewState.Loading
+            }
+        }
+
+    override fun fetchPageData() {
+        fetchCompanyInfo()
+        fetchLaunchList()
+    }
 
     override fun fetchCompanyInfo() {
         repository.fetchCompanyInfo()

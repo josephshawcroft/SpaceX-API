@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.observe
 import com.josephshawcroft.spacexapi.BaseFragment
 import com.josephshawcroft.spacexapi.databinding.FragmentLaunchListBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,12 +24,10 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
         savedInstanceState: Bundle?
     ): View = FragmentLaunchListBinding.inflate(inflater, container, false).run {
         setBinding()
+        viewModel.fetchPageData()
+        viewModel.viewState.observe(viewLifecycleOwner, { state ->
+            //TODO
+        })
         root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.fetchLaunchList()
-        viewModel.fetchCompanyInfo()
     }
 }
