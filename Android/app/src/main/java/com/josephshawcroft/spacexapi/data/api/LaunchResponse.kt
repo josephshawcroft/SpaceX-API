@@ -5,5 +5,6 @@ data class LaunchResponse(
     val id: String,
     val name: String,
     val rocket: String,
-    val success: Boolean
+    val success: Boolean,
+    val links: Links
 )

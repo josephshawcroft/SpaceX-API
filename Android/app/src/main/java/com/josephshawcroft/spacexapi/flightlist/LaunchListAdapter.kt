@@ -29,13 +29,16 @@ class LaunchListAdapter(private val imageLoader: ImageLoader) :
         holder.rocketText.text =  holder.itemView.context.getString(R.string.rocketSlash, item.rocket.name, item.rocket.type)
         holder.daysSinceText.text = "TODO"
 
-        val request = LoadRequest.Builder(holder.itemView.context)
-            .data(item.launch.missionImageUrl)
-            .target(holder.missionImage)
-            .placeholder(R.drawable.ic_rocket)
-            .build()
+        item.launch.missionImageUrl?.let {
+            val request = LoadRequest.Builder(holder.itemView.context)
+                .data(item.launch.missionImageUrl)
+                .target(holder.missionImage)
+                .placeholder(R.drawable.ic_rocket)
+                .error(R.drawable.ic_rocket)
+                .build()
 
-        imageLoader.execute(request)
+            imageLoader.execute(request)
+        } ?: holder.missionImage.setImageResource(R.drawable.ic_rocket)
     }
 
     override fun getItemCount(): Int = launchesList.count()
