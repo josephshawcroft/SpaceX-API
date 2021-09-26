@@ -35,7 +35,8 @@ internal class SpaceXRepositoryImpl @Inject constructor(private val spaceXApiSer
                 Launch(
                     it.name,
                     it.date_utc,
-                    it.rocket
+                    it.rocket,
+                    it.links.patch.small
                 )
             }
         }

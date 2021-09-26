@@ -5,16 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.observe
+import coil.ImageLoader
 import com.josephshawcroft.spacexapi.BaseFragment
 import com.josephshawcroft.spacexapi.R
 import com.josephshawcroft.spacexapi.databinding.FragmentLaunchListBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
 
     private lateinit var viewModel: LaunchListViewModel
-    private val adapter = LaunchListAdapter()
+    private val adapter by lazy { LaunchListAdapter(ImageLoader(requireContext())) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

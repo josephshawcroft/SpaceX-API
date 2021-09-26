@@ -1,12 +1,18 @@
 package com.josephshawcroft.spacexapi.flightlist
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
+import coil.request.LoadRequest
+import com.josephshawcroft.spacexapi.R
 import com.josephshawcroft.spacexapi.data.model.LaunchWithRocketInfo
 import com.josephshawcroft.spacexapi.databinding.LaunchItemBinding
 
-class LaunchListAdapter : RecyclerView.Adapter<LaunchListAdapter.ViewHolder>() {
+class LaunchListAdapter(private val imageLoader: ImageLoader) :
+    RecyclerView.Adapter<LaunchListAdapter.ViewHolder>() {
 
     private val launchesList = mutableListOf<LaunchWithRocketInfo>()
 
@@ -17,7 +23,19 @@ class LaunchListAdapter : RecyclerView.Adapter<LaunchListAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = launchesList[position]
+        holder.missionText.text = item.launch.missionName
+        holder.dateTimeText.text = item.launch.missionDate
+        holder.rocketText.text =  holder.itemView.context.getString(R.string.rocketSlash, item.rocket.name, item.rocket.type)
+        holder.daysSinceText.text = "TODO"
 
+        val request = LoadRequest.Builder(holder.itemView.context)
+            .data(item.launch.missionImageUrl)
+            .target(holder.missionImage)
+            .placeholder(R.drawable.ic_rocket)
+            .build()
+
+        imageLoader.execute(request)
     }
 
     override fun getItemCount(): Int = launchesList.count()
@@ -28,6 +46,10 @@ class LaunchListAdapter : RecyclerView.Adapter<LaunchListAdapter.ViewHolder>() {
     }
 
     class ViewHolder(binding: LaunchItemBinding) : RecyclerView.ViewHolder(binding.root) {
-
+        val missionImage = binding.missionImage
+        val missionText = binding.missionData
+        val dateTimeText = binding.dateTimeData
+        val rocketText = binding.rocketData
+        val daysSinceText = binding.daysSinceData
     }
 }
