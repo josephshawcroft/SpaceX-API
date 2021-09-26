@@ -208,48 +208,30 @@ class LaunchListViewModelImplTest {
     @Test
     fun givenViewModel_whenFetchDataCalledAndBothFetchLaunchListAndFetchCompanyInfoSucceed_thenViewStateIsLoaded() {
 
-        viewModel.viewState.observeForTesting {
-            givenViewModel_whenFetchCompanyInfoCalledAndSuccessful_thenCompanyInfoLiveDataLoadsAndThenPostsSuccess()
-        }
-
+        viewModel.viewState.observeForTesting { fetchCompanyInfoSucceeds() }
         assertThat(viewModel.viewState.value).isInstanceOf(ViewState.Loading::class.java)
 
-        viewModel.viewState.observeForTesting {
-            givenViewModel_whenFetchLaunchListCalledAndIsSuccessful_thenLaunchesLiveDataLoadsAndThenPostsSuccess()
-        }
-
+        viewModel.viewState.observeForTesting { fetchLaunchListSucceeds() }
         assertThat(viewModel.viewState.value).isInstanceOf(ViewState.Loaded::class.java)
     }
 
     @Test
     fun givenViewModel_whenFetchDataCalledAndFetchLaunchListFailsAndFetchCompanyInfoSucceeds_thenViewStateIsError() {
 
-        viewModel.viewState.observeForTesting {
-            givenViewModel_whenFetchLaunchListCalledAndFetchLaunchesSucceedsButFetchRocketsFails_thenLaunchesLiveDataLoadsAndThenPostsError()
-        }
-
+        viewModel.viewState.observeForTesting { fetchLaunchListFails() }
         assertThat(viewModel.viewState.value).isInstanceOf(ViewState.Error::class.java)
 
-        viewModel.viewState.observeForTesting {
-            givenViewModel_whenFetchCompanyInfoCalledAndSuccessful_thenCompanyInfoLiveDataLoadsAndThenPostsSuccess()
-        }
-
+        viewModel.viewState.observeForTesting { fetchCompanyInfoSucceeds() }
         assertThat(viewModel.viewState.value).isInstanceOf(ViewState.Error::class.java)
     }
 
     @Test
     fun givenViewModel_whenFetchDataCalledAndFetchLaunchListSucceedsAndFetchCompanyInfoFails_thenViewStateIsError() {
 
-        viewModel.viewState.observeForTesting {
-            givenViewModel_whenFetchLaunchListCalledAndIsSuccessful_thenLaunchesLiveDataLoadsAndThenPostsSuccess()
-        }
-
+        viewModel.viewState.observeForTesting { fetchLaunchListSucceeds() }
         assertThat(viewModel.viewState.value).isInstanceOf(ViewState.Loading::class.java)
 
-        viewModel.viewState.observeForTesting {
-            givenViewModel_whenFetchCompanyInfoCalledAndUnsuccessful_thenCompanyInfoLiveDataLoadsAndThenPostsError()
-        }
-
+        viewModel.viewState.observeForTesting { fetchCompanyInfoFails() }
         assertThat(viewModel.viewState.value).isInstanceOf(ViewState.Error::class.java)
     }
 
@@ -274,4 +256,16 @@ class LaunchListViewModelImplTest {
     private fun <T> LiveData<Response<T>>.assertIsErrorAndEqualTo(expected: Throwable?) {
         assertThat(value).isEqualTo(Response.Error<T>(expected))
     }
+
+    private fun fetchLaunchListSucceeds() =
+        givenViewModel_whenFetchLaunchListCalledAndIsSuccessful_thenLaunchesLiveDataLoadsAndThenPostsSuccess()
+
+    private fun fetchLaunchListFails() =
+        givenViewModel_whenFetchLaunchListCalledAndFetchLaunchesFailsButFetchRocketsSucceeds_thenLaunchesLiveDataLoadsAndThenPostsError()
+
+    private fun fetchCompanyInfoSucceeds() =
+        givenViewModel_whenFetchCompanyInfoCalledAndSuccessful_thenCompanyInfoLiveDataLoadsAndThenPostsSuccess()
+
+    private fun fetchCompanyInfoFails() =
+        givenViewModel_whenFetchCompanyInfoCalledAndUnsuccessful_thenCompanyInfoLiveDataLoadsAndThenPostsError()
 }
