@@ -3,21 +3,21 @@ package com.josephshawcroft.spacexapi.repository
 import com.josephshawcroft.spacexapi.data.model.CompanyInfo
 import com.josephshawcroft.spacexapi.data.model.Launch
 import com.josephshawcroft.spacexapi.data.model.Rocket
-import com.josephshawcroft.spacexapi.network.LaunchesService
+import com.josephshawcroft.spacexapi.network.SpaceXApiService
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
-interface LaunchListRepository {
+interface SpaceXRepository {
     fun fetchCompanyInfo(): Single<CompanyInfo>
     fun fetchLaunches(): Single<List<Launch>>
     fun fetchRockets(): Single<List<Rocket>>
 }
 
-internal class LaunchListRepositoryImpl @Inject constructor(private val launchesService: LaunchesService) :
-    LaunchListRepository {
+internal class SpaceXRepositoryImpl @Inject constructor(private val spaceXApiService: SpaceXApiService) :
+    SpaceXRepository {
 
     override fun fetchCompanyInfo(): Single<CompanyInfo> =
-        launchesService.fetchCompany().map { response ->
+        spaceXApiService.fetchCompany().map { response ->
             CompanyInfo(
                 response.employees,
                 response.founded,
@@ -30,7 +30,7 @@ internal class LaunchListRepositoryImpl @Inject constructor(private val launches
 
 
     override fun fetchLaunches(): Single<List<Launch>> =
-        launchesService.fetchLaunches().map { response ->
+        spaceXApiService.fetchLaunches().map { response ->
             response.map {
                 Launch(
                     it.name,
@@ -41,7 +41,7 @@ internal class LaunchListRepositoryImpl @Inject constructor(private val launches
         }
 
     override fun fetchRockets(): Single<List<Rocket>> =
-        launchesService.fetchRockets().map { response ->
+        spaceXApiService.fetchRockets().map { response ->
             response.map {
                 Rocket(
                     it.id,

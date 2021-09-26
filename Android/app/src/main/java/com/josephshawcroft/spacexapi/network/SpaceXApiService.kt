@@ -6,7 +6,7 @@ import com.josephshawcroft.spacexapi.data.api.RocketResponse
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 
-interface LaunchesService {
+interface SpaceXApiService {
 
     @GET("/v4/company")
     fun fetchCompany(): Single<CompanyInfoResponse>

@@ -1,7 +1,7 @@
 package com.josephshawcroft.spacexapi.di
 
 import com.josephshawcroft.spacexapi.BuildConfig
-import com.josephshawcroft.spacexapi.network.LaunchesService
+import com.josephshawcroft.spacexapi.network.SpaceXApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,13 +15,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 class NetworkModule {
 
     @Provides
-    fun provideLaunchesService(): LaunchesService {
+    fun provideLaunchesService(): SpaceXApiService {
         val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.API_URL)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        return retrofit.create(LaunchesService::class.java)
+        return retrofit.create(SpaceXApiService::class.java)
     }
 }

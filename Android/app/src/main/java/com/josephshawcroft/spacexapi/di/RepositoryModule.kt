@@ -1,8 +1,8 @@
 package com.josephshawcroft.spacexapi.di
 
-import com.josephshawcroft.spacexapi.network.LaunchesService
-import com.josephshawcroft.spacexapi.repository.LaunchListRepository
-import com.josephshawcroft.spacexapi.repository.LaunchListRepositoryImpl
+import com.josephshawcroft.spacexapi.network.SpaceXApiService
+import com.josephshawcroft.spacexapi.repository.SpaceXRepository
+import com.josephshawcroft.spacexapi.repository.SpaceXRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +15,6 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideLaunchListRepository(launchesService: LaunchesService): LaunchListRepository =
-        LaunchListRepositoryImpl(launchesService)
+    fun provideLaunchListRepository(spaceXApiService: SpaceXApiService): SpaceXRepository =
+        SpaceXRepositoryImpl(spaceXApiService)
 }

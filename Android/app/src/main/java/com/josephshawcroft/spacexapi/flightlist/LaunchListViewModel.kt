@@ -8,7 +8,7 @@ import com.josephshawcroft.spacexapi.data.model.CompanyInfo
 import com.josephshawcroft.spacexapi.data.model.Launch
 import com.josephshawcroft.spacexapi.data.model.LaunchWithRocketInfo
 import com.josephshawcroft.spacexapi.data.model.Rocket
-import com.josephshawcroft.spacexapi.repository.LaunchListRepository
+import com.josephshawcroft.spacexapi.repository.SpaceXRepository
 import com.josephshawcroft.spacexapi.utils.ioToMainScheduler
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -31,7 +31,7 @@ interface LaunchListViewModel {
 }
 
 internal class LaunchListViewModelImpl @ViewModelInject constructor(
-    private val repository: LaunchListRepository
+    private val repository: SpaceXRepository
 ) : ViewModel(), LaunchListViewModel {
 
     private var compositeDisposable = CompositeDisposable()
@@ -50,6 +50,7 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
             }, {
                 _companyInfo.postValue(Error(it))
             })
+            .addToDisposables()
     }
 
     override fun fetchLaunchList() {

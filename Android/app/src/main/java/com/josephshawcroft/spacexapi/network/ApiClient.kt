@@ -5,6 +5,6 @@ import javax.inject.Inject
 
 class ApiClient @Inject constructor(retrofit: Retrofit) {
 
-    private val launchesService: LaunchesService =
-        retrofit.create(LaunchesService::class.java)
+    private val spaceXApiService: SpaceXApiService =
+        retrofit.create(SpaceXApiService::class.java)
 }
