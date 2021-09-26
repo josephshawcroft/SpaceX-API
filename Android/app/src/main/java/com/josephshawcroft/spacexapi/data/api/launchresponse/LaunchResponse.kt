@@ -1,4 +1,4 @@
-package com.josephshawcroft.spacexapi.data.model
+package com.josephshawcroft.spacexapi.data.api.launchresponse
 
 data class LaunchResponse(
     val auto_update: Boolean,
