@@ -53,7 +53,7 @@ class LaunchListAdapter(private val imageLoader: ImageLoader) :
 
     override fun getItemCount(): Int = launchesList.count()
 
-    fun updateList(items: LaunchesList) {
+    fun updateList(items: List<LaunchWithRocketInfo>) {
         launchesList.clear()
         launchesList.addAll(items)
         notifyDataSetChanged()
