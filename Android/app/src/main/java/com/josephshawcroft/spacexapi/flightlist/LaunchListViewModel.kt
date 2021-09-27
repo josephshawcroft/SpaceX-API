@@ -1,12 +1,9 @@
 package com.josephshawcroft.spacexapi.flightlist
 
 import androidx.annotation.VisibleForTesting
-import androidx.fragment.app.FragmentActivity
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.josephshawcroft.spacexapi.data.Response
 import com.josephshawcroft.spacexapi.data.Response.*
 import com.josephshawcroft.spacexapi.data.model.CompanyInfo
@@ -16,39 +13,20 @@ import com.josephshawcroft.spacexapi.data.model.Rocket
 import com.josephshawcroft.spacexapi.repository.SpaceXRepository
 import com.josephshawcroft.spacexapi.utils.CombinedLiveData
 import com.josephshawcroft.spacexapi.utils.applyIoToMainObservable
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.BiFunction
+import javax.inject.Inject
 
 typealias LaunchesList = List<LaunchWithRocketInfo>
 
-interface LaunchListViewModel {
-
-    val viewState: LiveData<ViewState>
-
-    fun fetchPageData()
-
-    @VisibleForTesting
-    fun fetchCompanyInfo()
-
-    @VisibleForTesting
-    fun fetchLaunchList()
-
-    fun setFilters(vararg filters: LaunchFilter)
-
-    fun sortLaunchesBy(ascending: Boolean)
-
-    companion object {
-        fun get(fragmentActivity: FragmentActivity): LaunchListViewModel =
-            ViewModelProvider(fragmentActivity).get(LaunchListViewModelImpl::class.java)
-    }
-}
-
-internal class LaunchListViewModelImpl @ViewModelInject constructor(
+@HiltViewModel
+internal class LaunchListViewModel @Inject constructor(
     private val repository: SpaceXRepository,
     @VisibleForTesting val compositeDisposable: CompositeDisposable
-) : ViewModel(), LaunchListViewModel {
+) : ViewModel() {
 
     private val _launches = MutableLiveData<Response<LaunchesList>>()
 
@@ -78,7 +56,7 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
     val companyInfo
         get() = _companyInfo
 
-    override val viewState: LiveData<ViewState> =
+    val viewState: LiveData<ViewState> =
         CombinedLiveData<Response<LaunchesList>, Response<CompanyInfo>, ViewState>(
             _filteredLaunches,
             _companyInfo
@@ -94,12 +72,13 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
             }
         }
 
-    override fun fetchPageData() {
+    fun fetchPageData() {
         fetchCompanyInfo()
         fetchLaunchList()
     }
 
-    override fun fetchCompanyInfo() {
+    @VisibleForTesting
+    fun fetchCompanyInfo() {
         repository.fetchCompanyInfo()
             .applyIoToMainObservable()
             .doOnSubscribe { _companyInfo.value = IsLoading() }
@@ -111,7 +90,8 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
             .addToDisposables()
     }
 
-    override fun fetchLaunchList() {
+    @VisibleForTesting
+    fun fetchLaunchList() {
         Single.zip<List<Launch>, List<Rocket>, LaunchesList>(
             repository.fetchLaunches(),
             repository.fetchRockets(),
@@ -131,11 +111,11 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
             .addToDisposables()
     }
 
-    override fun setFilters(vararg filters: LaunchFilter) {
+    fun setFilters(vararg filters: LaunchFilter) {
         _filters.value = listOf(*filters)
     }
 
-    override fun sortLaunchesBy(ascending: Boolean) {
+    fun sortLaunchesBy(ascending: Boolean) {
         val launches = _launches.value
         if (launches is Success) {
             val sortedLaunches = if (ascending) {

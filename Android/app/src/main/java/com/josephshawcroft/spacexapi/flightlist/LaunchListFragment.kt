@@ -3,6 +3,8 @@ package com.josephshawcroft.spacexapi.flightlist
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout.VERTICAL
+import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.observe
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -11,18 +13,19 @@ import com.josephshawcroft.spacexapi.BaseFragment
 import com.josephshawcroft.spacexapi.R
 import com.josephshawcroft.spacexapi.databinding.FragmentLaunchListBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
 
-    private lateinit var viewModel: LaunchListViewModel
+    private val viewModel: LaunchListViewModel by hiltNavGraphViewModels<LaunchListViewModelImpl>(R.id.nav_graph)
+
     private val adapter by lazy { LaunchListAdapter(ImageLoader(requireContext())) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        viewModel = LaunchListViewModel.get(requireActivity())
     }
 
     override fun onCreateView(

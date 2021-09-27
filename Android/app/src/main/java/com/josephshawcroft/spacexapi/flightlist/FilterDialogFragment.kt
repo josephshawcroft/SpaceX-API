@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.josephshawcroft.spacexapi.R
 import com.josephshawcroft.spacexapi.databinding.FragmentFilterDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -12,12 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FilterDialogFragment : DialogFragment() {
 
-    private lateinit var viewModel: LaunchListViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = LaunchListViewModel.get(requireActivity())
-    }
+    private val viewModel: LaunchListViewModel by hiltNavGraphViewModels<LaunchListViewModelImpl>(R.id.nav_graph)
 
     override fun onCreateView(
         inflater: LayoutInflater,

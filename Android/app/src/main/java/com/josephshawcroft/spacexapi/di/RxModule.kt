@@ -3,11 +3,11 @@ package com.josephshawcroft.spacexapi.di
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 class RxModule {
 
     @Provides
