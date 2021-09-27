@@ -1,9 +1,7 @@
 package com.josephshawcroft.spacexapi.flightlist
 
+import android.app.AlertDialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout.HORIZONTAL
 import android.widget.LinearLayout.VERTICAL
 import androidx.lifecycle.observe
@@ -14,6 +12,10 @@ import com.josephshawcroft.spacexapi.R
 import com.josephshawcroft.spacexapi.databinding.FragmentLaunchListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import android.content.DialogInterface
+import android.view.*
+import androidx.navigation.Navigation
+
 
 @AndroidEntryPoint
 class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
@@ -23,6 +25,7 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         viewModel = LaunchListViewModel.get(this)
     }
 
@@ -74,5 +77,14 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
             companyInfo.valuation
         )
         adapter.updateList(state.launchesList)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.filterDialogMenuItem -> {
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_launchListFragment_to_filterDialogFragment)
+            true
+        }
+        else -> false
     }
 }

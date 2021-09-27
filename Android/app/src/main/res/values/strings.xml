@@ -10,4 +10,13 @@
     <string name="days">Days:</string>
     <string name="mission_patch_image">Mission patch image</string>
     <string name="rocketSlash">%1$s / %2$s</string>
+
+    <string name="filter_by">Filter by:</string>
+    <string name="launch_year">Launch year</string>
+    <string name="successful">Was successful</string>
+
+    <string name="sort_by">Sort by name:</string>
+    <string name="ascending">ASC</string>
+    <string name="descending">DESC</string>
+
 </resources>

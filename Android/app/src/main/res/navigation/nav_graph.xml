@@ -7,5 +7,14 @@
         android:id="@+id/launchListFragment"
         android:name="com.josephshawcroft.spacexapi.flightlist.LaunchListFragment"
         android:label="SpaceX"
-        tools:layout="@layout/fragment_launch_list"/>
+        tools:layout="@layout/fragment_launch_list">
+        <action
+            android:id="@+id/action_launchListFragment_to_filterDialogFragment"
+            app:destination="@id/filterDialogFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/filterDialogFragment"
+        android:name="com.josephshawcroft.spacexapi.flightlist.FilterDialogFragment"
+        android:label="Filter launches"
+        tools:layout="@layout/fragment_filter_dialog"/>
 </navigation>

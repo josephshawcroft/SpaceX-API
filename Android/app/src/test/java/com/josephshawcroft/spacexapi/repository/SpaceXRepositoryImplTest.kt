@@ -1,8 +1,6 @@
 package com.josephshawcroft.spacexapi.repository
 
-import com.josephshawcroft.spacexapi.data.api.CompanyInfoResponse
-import com.josephshawcroft.spacexapi.data.api.LaunchResponse
-import com.josephshawcroft.spacexapi.data.api.RocketResponse
+import com.josephshawcroft.spacexapi.data.api.*
 import com.josephshawcroft.spacexapi.network.SpaceXApiService
 import io.mockk.every
 import io.mockk.mockk
@@ -50,21 +48,24 @@ class SpaceXRepositoryImplTest {
                 id = "5eb87cdaffd86e000604b32b",
                 name = "Mega mission",
                 rocket = "2gfdusnak",
-                success = true
+                success = true,
+                links = Links(Patch("www.example.com"))
             ),
             LaunchResponse(
                 date_utc = "2017-03-31T01:10:00.000Z",
                 id = "42udnaffd86e000604b32b",
                 name = "Sad mission",
                 rocket = "id_2tndi9",
-                success = false
+                success = false,
+                links = Links(Patch("www.example.com"))
             ),
             LaunchResponse(
                 date_utc = "2011-11-11T01:10:00.000Z",
                 id = "y2mclamcbvoa",
                 name = "Skyrim mission",
                 rocket = "isssssss_2tndi9",
-                success = true
+                success = true,
+                links = Links(Patch("www.example.com"))
             )
         )
 
