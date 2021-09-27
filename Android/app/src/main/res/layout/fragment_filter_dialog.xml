@@ -26,14 +26,16 @@
         app:layout_constraintVertical_chainStyle="packed">
 
         <RadioButton
+            android:id="@+id/sortAscending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/ascending" />
+            android:text="@string/ascending"/>
 
         <RadioButton
+            android:id="@+id/sortDescending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/descending" />
+            android:text="@string/descending"/>
     </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

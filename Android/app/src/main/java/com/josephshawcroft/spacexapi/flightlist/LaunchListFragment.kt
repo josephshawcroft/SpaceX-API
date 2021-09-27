@@ -1,20 +1,16 @@
 package com.josephshawcroft.spacexapi.flightlist
 
-import android.app.AlertDialog
 import android.os.Bundle
-import android.widget.LinearLayout.HORIZONTAL
+import android.view.*
 import android.widget.LinearLayout.VERTICAL
 import androidx.lifecycle.observe
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import coil.ImageLoader
 import com.josephshawcroft.spacexapi.BaseFragment
 import com.josephshawcroft.spacexapi.R
 import com.josephshawcroft.spacexapi.databinding.FragmentLaunchListBinding
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
-import android.content.DialogInterface
-import android.view.*
-import androidx.navigation.Navigation
 
 
 @AndroidEntryPoint
@@ -26,7 +22,7 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        viewModel = LaunchListViewModel.get(this)
+        viewModel = LaunchListViewModel.get(requireActivity())
     }
 
     override fun onCreateView(

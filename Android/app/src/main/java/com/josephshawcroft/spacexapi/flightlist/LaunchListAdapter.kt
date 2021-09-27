@@ -56,6 +56,7 @@ class LaunchListAdapter(private val imageLoader: ImageLoader) :
     fun updateList(items: LaunchesList) {
         launchesList.clear()
         launchesList.addAll(items)
+        notifyDataSetChanged()
     }
 
     class ViewHolder(binding: LaunchItemBinding) : RecyclerView.ViewHolder(binding.root) {

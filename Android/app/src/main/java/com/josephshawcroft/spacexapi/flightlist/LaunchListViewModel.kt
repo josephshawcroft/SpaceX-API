@@ -1,6 +1,7 @@
 package com.josephshawcroft.spacexapi.flightlist
 
 import androidx.annotation.VisibleForTesting
+import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.josephshawcroft.spacexapi.data.Response
@@ -31,9 +32,11 @@ interface LaunchListViewModel {
     @VisibleForTesting
     fun fetchLaunchList()
 
+    fun sortLaunchesBy(ascending: Boolean)
+
     companion object {
-        fun get(owner: ViewModelStoreOwner): LaunchListViewModel =
-            ViewModelProvider(owner).get(LaunchListViewModelImpl::class.java)
+        fun get(fragmentActivity: FragmentActivity): LaunchListViewModel =
+            ViewModelProvider(fragmentActivity).get(LaunchListViewModelImpl::class.java)
     }
 }
 
@@ -105,6 +108,18 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
                 _launches.postValue(Error(it.cause))
             })
             .addToDisposables()
+    }
+
+    override fun sortLaunchesBy(ascending: Boolean) {
+        val launches = _launches.value
+        if (launches is Success) {
+            val sortedLaunches = if (ascending) {
+                launches.data.sortedBy { it.launch.missionName }
+            } else {
+                launches.data.sortedByDescending { it.launch.missionName }
+            }
+            _launches.value = Success(sortedLaunches)
+        }
     }
 
     override fun onCleared() {
