@@ -11,7 +11,7 @@ import com.josephshawcroft.spacexapi.data.model.LaunchWithRocketInfo
 import com.josephshawcroft.spacexapi.data.model.Rocket
 import com.josephshawcroft.spacexapi.repository.SpaceXRepository
 import com.josephshawcroft.spacexapi.utils.CombinedLiveData
-import com.josephshawcroft.spacexapi.utils.ioToMainScheduler
+import com.josephshawcroft.spacexapi.utils.applyIoToMainObservable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -77,7 +77,7 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
 
     override fun fetchCompanyInfo() {
         repository.fetchCompanyInfo()
-            .ioToMainScheduler()
+            .applyIoToMainObservable()
             .doOnSubscribe { _companyInfo.value = IsLoading() }
             .subscribe({
                 _companyInfo.postValue(Success(it))
@@ -93,11 +93,11 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
             repository.fetchRockets(),
             BiFunction { launches, rockets ->
                 launches.map { launch ->
-                    val rocket = rockets.first { launch.rocketId == it.id } //TODO
+                    val rocket = rockets.first { launch.rocketId == it.id }
                     LaunchWithRocketInfo(launch, rocket)
                 }
             })
-            .ioToMainScheduler()
+            .applyIoToMainObservable()
             .doOnSubscribe { _launches.value = IsLoading() }
             .subscribe({
                 _launches.postValue(Success(it))

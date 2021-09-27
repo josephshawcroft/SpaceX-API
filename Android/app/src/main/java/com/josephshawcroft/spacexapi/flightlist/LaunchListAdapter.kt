@@ -1,9 +1,7 @@
 package com.josephshawcroft.spacexapi.flightlist
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.LoadRequest
@@ -26,7 +24,11 @@ class LaunchListAdapter(private val imageLoader: ImageLoader) :
         val item = launchesList[position]
         holder.missionText.text = item.launch.missionName
         holder.dateTimeText.text = item.launch.missionDate
-        holder.rocketText.text =  holder.itemView.context.getString(R.string.rocketSlash, item.rocket.name, item.rocket.type)
+        holder.rocketText.text = holder.itemView.context.getString(
+            R.string.rocketSlash,
+            item.rocket.name,
+            item.rocket.type
+        )
         holder.daysSinceText.text = "TODO"
 
         item.launch.missionImageUrl?.let {
@@ -39,6 +41,14 @@ class LaunchListAdapter(private val imageLoader: ImageLoader) :
 
             imageLoader.execute(request)
         } ?: holder.missionImage.setImageResource(R.drawable.ic_rocket)
+
+        val isSuccessIcon = if(item.launch.wasSuccess) {
+            R.drawable.ic_tick
+        } else {
+            R.drawable.ic_cross
+        }
+
+        holder.isSuccessIcon.setImageResource(isSuccessIcon)
     }
 
     override fun getItemCount(): Int = launchesList.count()
@@ -54,5 +64,6 @@ class LaunchListAdapter(private val imageLoader: ImageLoader) :
         val dateTimeText = binding.dateTimeData
         val rocketText = binding.rocketData
         val daysSinceText = binding.daysSinceData
+        val isSuccessIcon = binding.iconIsSuccess
     }
 }

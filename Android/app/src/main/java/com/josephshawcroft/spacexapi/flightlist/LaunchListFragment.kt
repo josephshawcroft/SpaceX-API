@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout.HORIZONTAL
+import android.widget.LinearLayout.VERTICAL
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.DividerItemDecoration
 import coil.ImageLoader
 import com.josephshawcroft.spacexapi.BaseFragment
 import com.josephshawcroft.spacexapi.R
@@ -31,7 +34,11 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
 
         viewModel.fetchPageData()
 
-        binding.userList.adapter = adapter
+        with(binding.userList) {
+            val dividerItemDecoration = DividerItemDecoration(context, VERTICAL)
+            addItemDecoration(dividerItemDecoration)
+            adapter = this@LaunchListFragment.adapter
+        }
 
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
             when (state) {
