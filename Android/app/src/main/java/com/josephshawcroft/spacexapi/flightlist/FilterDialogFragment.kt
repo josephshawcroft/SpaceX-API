@@ -29,6 +29,8 @@ class FilterDialogFragment : DialogFragment() {
         root
     }
 
+    private fun setFilters(vararg filters: LaunchFilter) = viewModel.setFilters(*filters)
+
     private fun onSortRadioButtonClicked(view: View) = when (view.id) {
         R.id.sortAscending -> viewModel.sortLaunchesBy(ascending = true)
         R.id.sortDescending -> viewModel.sortLaunchesBy(ascending = false)

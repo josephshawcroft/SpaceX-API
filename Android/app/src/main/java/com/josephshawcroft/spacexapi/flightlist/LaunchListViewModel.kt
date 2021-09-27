@@ -3,7 +3,10 @@ package com.josephshawcroft.spacexapi.flightlist
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.josephshawcroft.spacexapi.data.Response
 import com.josephshawcroft.spacexapi.data.Response.*
 import com.josephshawcroft.spacexapi.data.model.CompanyInfo
@@ -32,6 +35,8 @@ interface LaunchListViewModel {
     @VisibleForTesting
     fun fetchLaunchList()
 
+    fun setFilters(vararg filters: LaunchFilter)
+
     fun sortLaunchesBy(ascending: Boolean)
 
     companion object {
@@ -51,6 +56,22 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
     val launches
         get() = _launches
 
+    private val _filters = MutableLiveData<List<LaunchFilter>>(emptyList())
+    private val _filteredLaunches =
+        CombinedLiveData<List<LaunchFilter>, Response<LaunchesList>, Response<LaunchesList>>(
+            _filters,
+            _launches
+        ) { filters, launches ->
+            if (launches !is Success) launches ?: IsLoading()
+            else {
+                val filteredLaunches = launches.data.toMutableList()
+                filters?.forEach { filter ->
+                    filteredLaunches.removeIf { !filter.doesItemMatchFilter(it) }
+                }
+                Success(filteredLaunches.toList())
+            }
+        }
+
     private val _companyInfo = MutableLiveData<Response<CompanyInfo>>()
 
     @VisibleForTesting
@@ -59,7 +80,7 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
 
     override val viewState: LiveData<ViewState> =
         CombinedLiveData<Response<LaunchesList>, Response<CompanyInfo>, ViewState>(
-            _launches,
+            _filteredLaunches,
             _companyInfo
         ) { launches, company ->
             when {
@@ -108,6 +129,10 @@ internal class LaunchListViewModelImpl @ViewModelInject constructor(
                 _launches.postValue(Error(it.cause))
             })
             .addToDisposables()
+    }
+
+    override fun setFilters(vararg filters: LaunchFilter) {
+        _filters.value = listOf(*filters)
     }
 
     override fun sortLaunchesBy(ascending: Boolean) {
