@@ -8,12 +8,6 @@ import io.reactivex.rxjava3.core.Single
 import org.joda.time.DateTime
 import javax.inject.Inject
 
-interface SpaceXRepository {
-    fun fetchCompanyInfo(): Single<CompanyInfo>
-    fun fetchLaunches(): Single<List<Launch>>
-    fun fetchRockets(): Single<List<Rocket>>
-}
-
 internal class SpaceXRepositoryImpl @Inject constructor(private val spaceXApiService: SpaceXApiService) :
     SpaceXRepository {
 
