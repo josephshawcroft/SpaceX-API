@@ -25,13 +25,13 @@ class LaunchListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = launchesList[position]
         holder.missionText.text = item.launch.missionName
-        holder.dateTimeText.text = item.launch.missionDate
+        holder.dateTimeText.text = item.launch.missionDate.toString()
         holder.rocketText.text = holder.itemView.context.getString(
             R.string.rocketSlash,
             item.rocket.name,
             item.rocket.type
         )
-        holder.daysSinceText.text = "TODO"
+        holder.daysSinceText.text = item.launch.daysSinceLaunch().toString()
 
         holder.itemView.setOnClickListener { launchListItemClickListener.onLaunchItemClicked(item) }
 

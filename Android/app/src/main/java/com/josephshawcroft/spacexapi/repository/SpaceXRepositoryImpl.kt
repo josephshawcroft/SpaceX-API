@@ -5,6 +5,7 @@ import com.josephshawcroft.spacexapi.data.model.Launch
 import com.josephshawcroft.spacexapi.data.model.Rocket
 import com.josephshawcroft.spacexapi.network.SpaceXApiService
 import io.reactivex.rxjava3.core.Single
+import org.joda.time.DateTime
 import javax.inject.Inject
 
 interface SpaceXRepository {
@@ -34,7 +35,7 @@ internal class SpaceXRepositoryImpl @Inject constructor(private val spaceXApiSer
             response.map {
                 Launch(
                     it.name,
-                    it.date_utc,
+                    DateTime.parse(it.date_utc),
                     it.rocket,
                     it.links.patch.small,
                     it.links.article,
