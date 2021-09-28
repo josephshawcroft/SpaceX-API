@@ -20,5 +20,7 @@
     <string name="sort_by">Sort by name:</string>
     <string name="ascending">ASC</string>
     <string name="descending">DESC</string>
+    <string name="web_page_unavailable">The web page is unavailable</string>
+    <string name="clear_filters">Clear filters</string>
 
 </resources>

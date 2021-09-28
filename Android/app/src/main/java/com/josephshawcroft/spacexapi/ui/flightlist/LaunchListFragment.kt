@@ -20,7 +20,6 @@ import com.josephshawcroft.spacexapi.databinding.FragmentLaunchListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.NullPointerException
 
-
 @AndroidEntryPoint
 class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>(), LaunchListItemClickListener {
 
@@ -86,15 +85,16 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>(), LaunchList
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.filterDialogMenuItem -> {
-            Navigation.findNavController(requireView())
-                .navigate(R.id.action_launchListFragment_to_filterDialogFragment)
-            true
+            Navigation.findNavController(requireView()).run {
+                if (currentDestination?.id == R.id.launchListFragment) navigate(R.id.action_launchListFragment_to_filterDialogFragment)
+                true
+            }
         }
         else -> false
     }
 
     override fun onLaunchItemClicked(launch: LaunchWithRocketInfo) {
-        launch.launch.articleUrl?.let { openWebPage(it) }
+        launch.launch.articleUrl?.let { openWebPage(it) } ?: displayErrorToast()
     }
 
     private fun openWebPage(url: String) {
@@ -115,9 +115,13 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>(), LaunchList
         ) {
             startActivity(intent)
         } else {
-            Toast.makeText(requireContext(), "The web page is unavailable", LENGTH_SHORT).show()
+            displayErrorToast()
         }
     }
+
+    private fun displayErrorToast() =
+        Toast.makeText(requireContext(), getString(R.string.web_page_unavailable), LENGTH_SHORT)
+            .show()
 
     override fun onDestroyView() {
         adapter = null
