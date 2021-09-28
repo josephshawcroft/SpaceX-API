@@ -6,19 +6,19 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class FilterDialogViewModelImpl @Inject constructor() : ViewModel() {
+class FilterDialogViewModelImpl @Inject constructor() : ViewModel(), FilterDialogViewModel {
 
     private val _viewState = MutableLiveData<ViewState>(ViewState())
-    val viewState
+    override val viewState
         get() = _viewState
 
-    fun updateSuccessfulLaunchAnswer(state: SuccessfulLaunchState) {
+    override fun updateSuccessfulLaunchAnswer(state: SuccessfulLaunchState) {
         viewState.value?.let {
             _viewState.value = it.copy(successfulLaunchState = state)
         }
     }
 
-    fun updateNamingSortBy(state: NameSortedAscendingState) {
+    override fun updateNamingSortBy(state: NameSortedAscendingState) {
         viewState.value?.let {
             _viewState.value = it.copy(
                 nameSortedAscendingState = state

@@ -12,7 +12,8 @@
     <string name="rocketSlash">%1$s / %2$s</string>
 
     <string name="filter_by">Filter by:</string>
-    <string name="launch_year">Launch years</string>
+    <string name="launch_year">Launch years:</string>
+    <string name="year_to">-</string>
     <string name="successful">Was successful:</string>
     <string name="answer_true">True</string>
     <string name="answer_false">False</string>
@@ -22,5 +23,6 @@
     <string name="descending">DESC</string>
     <string name="web_page_unavailable">The web page is unavailable</string>
     <string name="clear_filters">Clear filters</string>
+    <string name="invalid_date_range">Invalid range</string>
 
 </resources>

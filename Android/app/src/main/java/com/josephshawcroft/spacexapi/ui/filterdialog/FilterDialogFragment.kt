@@ -24,6 +24,7 @@ class FilterDialogFragment : DialogFragment() {
     private val launchViewModel: LaunchListViewModel by hiltNavGraphViewModels<LaunchListViewModelImpl>(
         R.id.nav_graph
     )
+
     private val dialogViewModel: FilterDialogViewModelImpl by hiltNavGraphViewModels(R.id.nav_graph)
 
     override fun onCreateView(

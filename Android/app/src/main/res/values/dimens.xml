@@ -3,4 +3,5 @@
     <dimen name="was_successful_margin_top">12dp</dimen>
     <dimen name="dialog_fragment_padding">24dp</dimen>
     <dimen name="launch_year_margin_top">12dp</dimen>
+    <dimen name="editTextWidth">48dp</dimen>
 </resources>
