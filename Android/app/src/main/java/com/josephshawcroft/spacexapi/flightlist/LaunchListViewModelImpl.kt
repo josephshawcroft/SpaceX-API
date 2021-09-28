@@ -20,7 +20,7 @@ import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.BiFunction
 import javax.inject.Inject
 
-private typealias LaunchesList = List<LaunchWithRocketInfo>
+typealias LaunchesList = List<LaunchWithRocketInfo>
 
 @HiltViewModel
 internal class LaunchListViewModelImpl @Inject constructor(

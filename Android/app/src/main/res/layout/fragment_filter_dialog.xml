@@ -2,7 +2,72 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+
+    <TextView
+        android:id="@+id/filterByText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_by"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/launchDateText"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/launch_year"
+        android:gravity="center"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filterByText"/>
+
+    <TextView
+        android:id="@+id/wasSuccessfulText"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/successful"
+        android:gravity="center"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filterByText"
+        app:layout_constraintEnd_toStartOf="@id/wasLaunchSuccessRadioGroup"
+        app:layout_constraintBottom_toBottomOf="@id/wasLaunchSuccessRadioGroup"/>
+
+    <RadioGroup
+        android:id="@+id/wasLaunchSuccessRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/wasSuccessfulText"
+        app:layout_constraintTop_toTopOf="@id/wasSuccessfulText"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <RadioButton
+            android:id="@+id/answerTrue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ascending"/>
+
+        <RadioButton
+            android:id="@+id/answerFalse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/descending"/>
+    </RadioGroup>
+
+    <!--    <Button-->
+<!--        android:id="@+id/clearFiltersButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        />-->
 
     <TextView
         android:id="@+id/sortByText"
@@ -12,7 +77,7 @@
         app:layout_constraintBottom_toTopOf="@id/sortByRadioGroup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/wasSuccessfulText"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <RadioGroup
