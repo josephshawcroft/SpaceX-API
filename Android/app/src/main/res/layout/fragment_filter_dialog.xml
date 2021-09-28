@@ -22,11 +22,40 @@
         android:layout_marginTop="@dimen/launch_year_margin_top"
         android:gravity="center"
         android:text="@string/launch_year"
+        app:layout_constraintBottom_toBottomOf="@id/fromYear"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/filterByText" />
 
+    <EditText
+        android:id="@+id/fromYear"
+        android:layout_width="@dimen/editTextWidth"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:inputType="number"
+        android:maxLength="4"
+        app:layout_constraintStart_toEndOf="@id/launchDateText"
+        app:layout_constraintTop_toTopOf="@id/launchDateText" />
+
+    <TextView
+        android:id="@+id/toText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/year_to"
+        app:layout_constraintBottom_toBottomOf="@id/fromYear"
+        app:layout_constraintStart_toEndOf="@id/fromYear"
+        app:layout_constraintTop_toTopOf="@id/fromYear" />
+
+    <EditText
+        android:id="@+id/toYear"
+        android:layout_width="@dimen/editTextWidth"
+        android:layout_height="0dp"
+        android:inputType="number"
+        android:maxLength="4"
+        app:layout_constraintBottom_toBottomOf="@id/fromYear"
+        app:layout_constraintStart_toEndOf="@id/toText"
+        app:layout_constraintTop_toTopOf="@id/fromYear" />
 
     <TextView
         android:id="@+id/wasSuccessfulText"
@@ -67,13 +96,13 @@
 
     <Button
         android:id="@+id/clearFiltersButton"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/clear_filters"
-        app:layout_constraintTop_toBottomOf="@id/wasLaunchSuccessRadioGroup"
         app:layout_constraintBottom_toTopOf="@id/sortByText"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/wasLaunchSuccessRadioGroup" />
 
     <TextView
         android:id="@+id/sortByText"
