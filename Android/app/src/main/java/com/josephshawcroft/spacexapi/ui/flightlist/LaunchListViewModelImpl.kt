@@ -1,4 +1,4 @@
-package com.josephshawcroft.spacexapi.flightlist
+package com.josephshawcroft.spacexapi.ui.flightlist
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData

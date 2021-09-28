@@ -6,7 +6,7 @@
     app:startDestination="@id/launchListFragment">
     <fragment
         android:id="@+id/launchListFragment"
-        android:name="com.josephshawcroft.spacexapi.flightlist.LaunchListFragment"
+        android:name="com.josephshawcroft.spacexapi.ui.flightlist.LaunchListFragment"
         android:label="SpaceX"
         tools:layout="@layout/fragment_launch_list">
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <dialog
         android:id="@+id/filterDialogFragment"
-        android:name="com.josephshawcroft.spacexapi.flightlist.FilterDialogFragment"
+        android:name="com.josephshawcroft.spacexapi.ui.flightlist.FilterDialogFragment"
         android:label="Filter launches"
         tools:layout="@layout/fragment_filter_dialog"/>
 </navigation>

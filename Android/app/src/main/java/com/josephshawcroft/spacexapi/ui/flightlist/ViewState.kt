@@ -1,4 +1,4 @@
-package com.josephshawcroft.spacexapi.flightlist
+package com.josephshawcroft.spacexapi.ui.flightlist
 
 import com.josephshawcroft.spacexapi.data.model.CompanyInfo
 

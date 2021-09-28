@@ -1,4 +1,4 @@
-package com.josephshawcroft.spacexapi.flightlist
+package com.josephshawcroft.spacexapi.ui.flightlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,8 +9,10 @@ import com.josephshawcroft.spacexapi.R
 import com.josephshawcroft.spacexapi.data.model.LaunchWithRocketInfo
 import com.josephshawcroft.spacexapi.databinding.LaunchItemBinding
 
-class LaunchListAdapter(private val imageLoader: ImageLoader) :
-    RecyclerView.Adapter<LaunchListAdapter.ViewHolder>() {
+class LaunchListAdapter(
+    private val imageLoader: ImageLoader,
+    private val launchListItemClickListener: LaunchListItemClickListener
+) : RecyclerView.Adapter<LaunchListAdapter.ViewHolder>() {
 
     private val launchesList = mutableListOf<LaunchWithRocketInfo>()
 
@@ -31,6 +33,8 @@ class LaunchListAdapter(private val imageLoader: ImageLoader) :
         )
         holder.daysSinceText.text = "TODO"
 
+        holder.itemView.setOnClickListener { launchListItemClickListener.onLaunchItemClicked(item) }
+
         item.launch.missionImageUrl?.let {
             val request = LoadRequest.Builder(holder.itemView.context)
                 .data(item.launch.missionImageUrl)
@@ -42,7 +46,7 @@ class LaunchListAdapter(private val imageLoader: ImageLoader) :
             imageLoader.execute(request)
         } ?: holder.missionImage.setImageResource(R.drawable.ic_rocket)
 
-        val isSuccessIcon = if(item.launch.wasSuccess) {
+        val isSuccessIcon = if (item.launch.wasSuccess) {
             R.drawable.ic_tick
         } else {
             R.drawable.ic_cross

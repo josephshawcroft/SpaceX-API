@@ -1,9 +1,13 @@
-package com.josephshawcroft.spacexapi.flightlist
+package com.josephshawcroft.spacexapi.ui.flightlist
 
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout.VERTICAL
-import androidx.fragment.app.viewModels
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.observe
 import androidx.navigation.Navigation
@@ -11,17 +15,17 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import coil.ImageLoader
 import com.josephshawcroft.spacexapi.BaseFragment
 import com.josephshawcroft.spacexapi.R
+import com.josephshawcroft.spacexapi.data.model.LaunchWithRocketInfo
 import com.josephshawcroft.spacexapi.databinding.FragmentLaunchListBinding
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import java.lang.NullPointerException
 
 
 @AndroidEntryPoint
-class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
+class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>(), LaunchListItemClickListener {
 
     private val viewModel: LaunchListViewModel by hiltNavGraphViewModels<LaunchListViewModelImpl>(R.id.nav_graph)
-
-    private val adapter by lazy { LaunchListAdapter(ImageLoader(requireContext())) }
+    private var adapter: LaunchListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,8 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
         savedInstanceState: Bundle?
     ): View = FragmentLaunchListBinding.inflate(inflater, container, false).run {
         setBinding()
+
+        adapter = LaunchListAdapter(ImageLoader(requireContext()), this@LaunchListFragment)
 
         viewModel.fetchPageData()
 
@@ -75,7 +81,7 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
             companyInfo.launchSites,
             companyInfo.valuation
         )
-        adapter.updateList(state.launchesList)
+        adapter?.updateList(state.launchesList)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -86,4 +92,36 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>() {
         }
         else -> false
     }
+
+    override fun onLaunchItemClicked(launch: LaunchWithRocketInfo) {
+        launch.launch.articleUrl?.let { openWebPage(it) }
+    }
+
+    private fun openWebPage(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+
+        val uri = try {
+            Uri.parse(url)
+        } catch (e: NullPointerException) {
+            return
+        }
+
+        intent.data = uri
+
+        if (intent.resolveActivityInfo(
+                requireActivity().packageManager,
+                PackageManager.MATCH_DEFAULT_ONLY
+            )?.exported == true
+        ) {
+            startActivity(intent)
+        } else {
+            Toast.makeText(requireContext(), "The web page is unavailable", LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onDestroyView() {
+        adapter = null
+        super.onDestroyView()
+    }
+
 }

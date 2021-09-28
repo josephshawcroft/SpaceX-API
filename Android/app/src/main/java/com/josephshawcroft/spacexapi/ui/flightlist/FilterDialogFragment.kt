@@ -1,4 +1,4 @@
-package com.josephshawcroft.spacexapi.flightlist
+package com.josephshawcroft.spacexapi.ui.flightlist
 
 import android.os.Bundle
 import android.view.LayoutInflater

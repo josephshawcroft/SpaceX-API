@@ -5,6 +5,7 @@ data class Launch(
     val missionDate: String,
     val rocketId: String,
     val missionImageUrl: String?,
+    val articleUrl: String?,
     val wasSuccess: Boolean
 ) {
     val daysSinceLaunch = Unit // TODO needs to account for both dates before and dates after
