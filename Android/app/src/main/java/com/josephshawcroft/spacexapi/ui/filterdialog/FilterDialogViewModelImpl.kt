@@ -12,11 +12,16 @@ class FilterDialogViewModelImpl @Inject constructor() : ViewModel() {
     val viewState
         get() = _viewState
 
-    fun updateSuccessfulLaunchAnswer(wasSuccessful: Boolean? = null) {
+    fun updateSuccessfulLaunchAnswer(state: SuccessfulLaunchState) {
+        viewState.value?.let {
+            _viewState.value = it.copy(successfulLaunchState = state)
+        }
+    }
+
+    fun updateNamingSortBy(state: NameSortedAscendingState) {
         viewState.value?.let {
             _viewState.value = it.copy(
-                isSuccessfulLaunchAnswerTrueSelected = wasSuccessful ?: false,
-                isSuccessfulLaunchAnswerFalseSelected = wasSuccessful?.not() ?: false
+                nameSortedAscendingState = state
             )
         }
     }

@@ -1,7 +1,14 @@
 package com.josephshawcroft.spacexapi.ui.filterdialog
 
 data class ViewState(
-    val isSuccessfulLaunchAnswerTrueSelected : Boolean = false,
-    val isSuccessfulLaunchAnswerFalseSelected : Boolean = false,
-    val isSortedAscending: Boolean = true
+    val successfulLaunchState: SuccessfulLaunchState = SuccessfulLaunchState.NONE,
+    val nameSortedAscendingState: NameSortedAscendingState = NameSortedAscendingState.NONE
 )
+
+enum class SuccessfulLaunchState {
+    NONE, SUCCESSFUL, UNSUCCESSFUL
+}
+
+enum class NameSortedAscendingState {
+    NONE, ASCENDING, DESCENDING
+}
