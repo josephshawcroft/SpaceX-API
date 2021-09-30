@@ -9,8 +9,7 @@ import javax.inject.Inject
 class FilterDialogViewModelImpl @Inject constructor() : ViewModel(), FilterDialogViewModel {
 
     private val _viewState = MutableLiveData<ViewState>(ViewState())
-    override val viewState
-        get() = _viewState
+    override val viewState = _viewState
 
     override fun updateSuccessfulLaunchAnswer(state: SuccessfulLaunchState) {
         viewState.value?.let {

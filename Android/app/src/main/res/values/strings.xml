@@ -24,5 +24,6 @@
     <string name="web_page_unavailable">The web page is unavailable</string>
     <string name="clear_filters">Clear filters</string>
     <string name="invalid_date_range">Invalid range</string>
+    <string name="incorrect_date_range">Incorrect date range</string>
 
 </resources>

@@ -4,6 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.Observer
@@ -12,11 +16,10 @@ import com.josephshawcroft.spacexapi.databinding.FragmentFilterDialogBinding
 import com.josephshawcroft.spacexapi.ui.filterdialog.NameSortedAscendingState.*
 import com.josephshawcroft.spacexapi.ui.filterdialog.SuccessfulLaunchState.*
 import com.josephshawcroft.spacexapi.ui.filterdialog.SuccessfulLaunchState.NONE
-import com.josephshawcroft.spacexapi.ui.flightlist.LaunchFilter
-import com.josephshawcroft.spacexapi.ui.flightlist.LaunchListViewModel
+import com.josephshawcroft.spacexapi.ui.flightlist.*
 import com.josephshawcroft.spacexapi.ui.flightlist.LaunchListViewModelImpl
-import com.josephshawcroft.spacexapi.ui.flightlist.SuccessFilter
 import dagger.hilt.android.AndroidEntryPoint
+import org.joda.time.DateTime
 
 @AndroidEntryPoint
 class FilterDialogFragment : DialogFragment() {
@@ -32,6 +35,7 @@ class FilterDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = FragmentFilterDialogBinding.inflate(inflater, container, false).run {
+
         answerSuccessful.setOnClickListener {
             addFilter(SuccessFilter(true))
             dialogViewModel.updateSuccessfulLaunchAnswer(SUCCESSFUL)
@@ -41,9 +45,41 @@ class FilterDialogFragment : DialogFragment() {
             dialogViewModel.updateSuccessfulLaunchAnswer(UNSUCCESSFUL)
         }
         clearFiltersButton.setOnClickListener {
-            clearFilters()
+            launchViewModel.setFilters() // clears launch VM filters
+
             wasLaunchSuccessRadioGroup.clearCheck()
+            sortByRadioGroup.clearCheck()
+
             dialogViewModel.updateSuccessfulLaunchAnswer(NONE)
+            dialogViewModel.updateNamingSortBy(NameSortedAscendingState.NONE)
+        }
+
+        fromYear.doOnTextChanged { text, _, _, _ ->
+            val count = text?.count() ?: 0
+            val toYearCount = toYear.text?.count() ?: 0
+            if (count < 4 || toYearCount < 4) return@doOnTextChanged
+            text?.let { fromYear ->
+                toYear.text?.let { toYear ->
+                    evaluateDateRange(
+                        Integer.parseInt(fromYear.toString()),
+                        Integer.parseInt(toYear.toString())
+                    )
+                }
+            }
+        }
+
+        toYear.doOnTextChanged { text, _, _, _ ->
+            val count = text?.count() ?: 0
+            val fromYearCount = fromYear.text?.count() ?: 0
+            if (count < 4 || fromYearCount < 4) return@doOnTextChanged
+            text?.let { toYear ->
+                fromYear.text?.let { fromYear ->
+                    evaluateDateRange(
+                        Integer.parseInt(fromYear.toString()),
+                        Integer.parseInt(toYear.toString())
+                    )
+                }
+            }
         }
 
         sortAscending.setOnClickListener { view -> onSortRadioButtonClicked(view) }
@@ -61,11 +97,20 @@ class FilterDialogFragment : DialogFragment() {
         root
     }
 
+    private fun evaluateDateRange(fromYear: Int, toYear: Int) {
+        if (fromYear > toYear) {
+            Toast.makeText(requireContext(), getString(R.string.incorrect_date_range), LENGTH_SHORT).show()
+            return
+        }
+
+        val fromDate = DateTime().withDate(fromYear, 1, 1).withTimeAtStartOfDay()
+        val toDate = DateTime().withDate(toYear + 1, 1, 1).withTimeAtStartOfDay()
+        launchViewModel.setFilters(YearFilter(fromDate to toDate))
+    }
+
     private fun setFilters(vararg filters: LaunchFilter) = launchViewModel.setFilters(*filters)
 
     private fun addFilter(filter: LaunchFilter) = launchViewModel.setFilters(filter)
-
-    private fun clearFilters() = launchViewModel.setFilters()
 
     private fun onSortRadioButtonClicked(view: View) = when (view.id) {
         R.id.sortAscending -> {
