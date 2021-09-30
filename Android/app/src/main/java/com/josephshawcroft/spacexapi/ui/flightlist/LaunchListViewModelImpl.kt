@@ -29,9 +29,13 @@ internal class LaunchListViewModelImpl @Inject constructor(
 ) : ViewModel(), LaunchListViewModel {
 
     private val _launches = MutableLiveData<Response<LaunchesList>>()
+    private val _companyInfo = MutableLiveData<Response<CompanyInfo>>()
 
     @VisibleForTesting
-    val launches : LiveData<Response<LaunchesList>> = _launches
+    val launches: LiveData<Response<LaunchesList>> = _launches
+
+    @VisibleForTesting
+    val companyInfo: LiveData<Response<CompanyInfo>> = _companyInfo
 
     private val _filters = MutableLiveData<List<LaunchFilter>>(emptyList())
     private val _filteredLaunches =
@@ -48,11 +52,6 @@ internal class LaunchListViewModelImpl @Inject constructor(
                 Success(filteredLaunches.toList())
             }
         }
-
-    private val _companyInfo = MutableLiveData<Response<CompanyInfo>>()
-
-    @VisibleForTesting
-    val companyInfo : LiveData<Response<CompanyInfo>> = _companyInfo
 
     override val viewState: LiveData<ViewState> =
         CombinedLiveData<Response<LaunchesList>, Response<CompanyInfo>, ViewState>(
