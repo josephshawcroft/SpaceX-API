@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
@@ -17,7 +16,6 @@ import com.josephshawcroft.spacexapi.ui.filterdialog.NameSortedAscendingState.*
 import com.josephshawcroft.spacexapi.ui.filterdialog.SuccessfulLaunchState.*
 import com.josephshawcroft.spacexapi.ui.filterdialog.SuccessfulLaunchState.NONE
 import com.josephshawcroft.spacexapi.ui.flightlist.*
-import com.josephshawcroft.spacexapi.ui.flightlist.LaunchListViewModelImpl
 import dagger.hilt.android.AndroidEntryPoint
 import org.joda.time.DateTime
 
@@ -44,8 +42,12 @@ class FilterDialogFragment : DialogFragment() {
             addFilter(SuccessFilter(false))
             dialogViewModel.updateSuccessfulLaunchAnswer(UNSUCCESSFUL)
         }
+        
         clearFiltersButton.setOnClickListener {
             launchViewModel.setFilters() // clears launch VM filters
+
+            fromYear.text.clear()
+            toYear.text.clear()
 
             wasLaunchSuccessRadioGroup.clearCheck()
             sortByRadioGroup.clearCheck()
@@ -99,7 +101,8 @@ class FilterDialogFragment : DialogFragment() {
 
     private fun evaluateDateRange(fromYear: Int, toYear: Int) {
         if (fromYear > toYear) {
-            Toast.makeText(requireContext(), getString(R.string.incorrect_date_range), LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.incorrect_date_range), LENGTH_SHORT)
+                .show()
             return
         }
 
