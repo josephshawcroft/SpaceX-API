@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="company_info_margin_top">8dp</dimen>
+    <dimen name="company_info_margin_horizontal">6dp</dimen>
     <dimen name="was_successful_margin_top">12dp</dimen>
     <dimen name="dialog_fragment_padding">24dp</dimen>
     <dimen name="launch_year_margin_top">12dp</dimen>
     <dimen name="editTextWidth">48dp</dimen>
+    <dimen name="user_list_margin_top">8dp</dimen>
 </resources>

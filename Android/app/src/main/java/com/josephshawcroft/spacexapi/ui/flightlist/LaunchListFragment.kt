@@ -37,7 +37,7 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>(), LaunchList
     ): View = FragmentLaunchListBinding.inflate(inflater, container, false).run {
         setBinding()
 
-        adapter = LaunchListAdapter(ImageLoader(requireContext()), this@LaunchListFragment)
+        adapter = LaunchListAdapter(ImageLoader(binding.root.context), this@LaunchListFragment)
 
         viewModel.fetchPageData()
 
@@ -69,6 +69,7 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>(), LaunchList
 
     private fun showLoadedState(state: ViewState.Loaded) {
         val companyInfo = state.companyInfo
+        binding.companyInfoDivider.visibility = View.VISIBLE
         binding.errorText.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         binding.companyInfoTextView.text = binding.root.context.getString(
