@@ -98,7 +98,7 @@ class LaunchListViewModelImplTest {
             LaunchWithRocketInfo(launch, rockets[index])
         }
 
-        val launchesSubject = PublishSubject.create<LaunchesList>()
+        val launchesSubject = PublishSubject.create<List<LaunchWithRocketInfo>>()
         every { spaceXRepository.fetchLaunches() } returns Single.just(launches)
             .delaySubscription(launchesSubject)
 
@@ -125,7 +125,7 @@ class LaunchListViewModelImplTest {
             LaunchBuilder(rocketId = id).build()
         }
 
-        val launchesSubject = PublishSubject.create<LaunchesList>()
+        val launchesSubject = PublishSubject.create<List<LaunchWithRocketInfo>>()
         every { spaceXRepository.fetchLaunches() } returns Single.just(launches)
             .delaySubscription(launchesSubject)
 
@@ -186,7 +186,7 @@ class LaunchListViewModelImplTest {
             LaunchWithRocketInfo(launch, rockets[index])
         }
 
-        val launchesSubject = PublishSubject.create<LaunchesList>()
+        val launchesSubject = PublishSubject.create<List<LaunchWithRocketInfo>>()
         every { spaceXRepository.fetchLaunches() } returns Single.just(launches)
             .delaySubscription(launchesSubject)
 

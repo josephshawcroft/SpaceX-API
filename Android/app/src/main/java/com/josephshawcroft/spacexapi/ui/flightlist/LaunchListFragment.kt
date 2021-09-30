@@ -81,7 +81,7 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>(), LaunchList
             companyInfo.launchSites,
             companyInfo.valuation
         )
-        adapter?.updateList(state.launchesList)
+        adapter?.updateList(state.launches)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {

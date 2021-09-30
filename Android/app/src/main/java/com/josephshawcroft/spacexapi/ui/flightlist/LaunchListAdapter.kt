@@ -14,7 +14,7 @@ class LaunchListAdapter(
     private val launchListItemClickListener: LaunchListItemClickListener
 ) : RecyclerView.Adapter<LaunchListAdapter.ViewHolder>() {
 
-    private val launchesList = mutableListOf<LaunchWithRocketInfo>()
+    private val launches = mutableListOf<LaunchWithRocketInfo>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -23,7 +23,7 @@ class LaunchListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = launchesList[position]
+        val item = launches[position]
         holder.missionText.text = item.launch.missionName
         holder.dateTimeText.text = item.launch.missionDate.toString()
         holder.rocketText.text = holder.itemView.context.getString(
@@ -55,11 +55,11 @@ class LaunchListAdapter(
         holder.isSuccessIcon.setImageResource(isSuccessIcon)
     }
 
-    override fun getItemCount(): Int = launchesList.count()
+    override fun getItemCount(): Int = launches.count()
 
     fun updateList(items: List<LaunchWithRocketInfo>) {
-        launchesList.clear()
-        launchesList.addAll(items)
+        launches.clear()
+        launches.addAll(items)
         notifyDataSetChanged()
     }
 

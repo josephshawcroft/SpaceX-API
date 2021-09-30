@@ -20,26 +20,24 @@ import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.BiFunction
 import javax.inject.Inject
 
-typealias LaunchesList = List<LaunchWithRocketInfo>
-
 @HiltViewModel
 internal class LaunchListViewModelImpl @Inject constructor(
     private val repository: SpaceXRepository,
     @VisibleForTesting val compositeDisposable: CompositeDisposable
 ) : ViewModel(), LaunchListViewModel {
 
-    private val _launches = MutableLiveData<Response<LaunchesList>>()
+    private val _launches = MutableLiveData<Response<List<LaunchWithRocketInfo>>>()
     private val _companyInfo = MutableLiveData<Response<CompanyInfo>>()
 
     @VisibleForTesting
-    val launches: LiveData<Response<LaunchesList>> = _launches
+    val launches: LiveData<Response<List<LaunchWithRocketInfo>>> = _launches
 
     @VisibleForTesting
     val companyInfo: LiveData<Response<CompanyInfo>> = _companyInfo
 
     private val _filters = MutableLiveData<List<LaunchFilter>>(emptyList())
     private val _filteredLaunches =
-        CombinedLiveData<List<LaunchFilter>, Response<LaunchesList>, Response<LaunchesList>>(
+        CombinedLiveData<List<LaunchFilter>, Response<List<LaunchWithRocketInfo>>, Response<List<LaunchWithRocketInfo>>>(
             _filters,
             _launches
         ) { filters, launches ->
@@ -54,7 +52,7 @@ internal class LaunchListViewModelImpl @Inject constructor(
         }
 
     override val viewState: LiveData<ViewState> =
-        CombinedLiveData<Response<LaunchesList>, Response<CompanyInfo>, ViewState>(
+        CombinedLiveData<Response<List<LaunchWithRocketInfo>>, Response<CompanyInfo>, ViewState>(
             _filteredLaunches,
             _companyInfo
         ) { launches, company ->
@@ -89,7 +87,7 @@ internal class LaunchListViewModelImpl @Inject constructor(
 
     @VisibleForTesting
     fun fetchLaunchList() {
-        Single.zip<List<Launch>, List<Rocket>, LaunchesList>(
+        Single.zip<List<Launch>, List<Rocket>, List<LaunchWithRocketInfo>>(
             repository.fetchLaunches(),
             repository.fetchRockets(),
             BiFunction { launches, rockets ->
