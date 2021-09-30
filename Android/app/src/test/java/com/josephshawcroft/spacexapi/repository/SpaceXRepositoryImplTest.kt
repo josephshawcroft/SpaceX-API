@@ -6,6 +6,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.rxjava3.core.Single
 import org.assertj.core.api.Assertions.assertThat
+import org.joda.time.DateTime
 import org.junit.Test
 
 class SpaceXRepositoryImplTest {
@@ -49,7 +50,7 @@ class SpaceXRepositoryImplTest {
                 name = "Mega mission",
                 rocket = "2gfdusnak",
                 success = true,
-                links = Links(Patch("www.example.com"))
+                links = Links(Patch("www.example.com"), "www.example.com")
             ),
             LaunchResponse(
                 date_utc = "2017-03-31T01:10:00.000Z",
@@ -57,7 +58,7 @@ class SpaceXRepositoryImplTest {
                 name = "Sad mission",
                 rocket = "id_2tndi9",
                 success = false,
-                links = Links(Patch("www.example.com"))
+                links = Links(Patch("www.example.com"), "www.example.com")
             ),
             LaunchResponse(
                 date_utc = "2011-11-11T01:10:00.000Z",
@@ -65,7 +66,7 @@ class SpaceXRepositoryImplTest {
                 name = "Skyrim mission",
                 rocket = "isssssss_2tndi9",
                 success = true,
-                links = Links(Patch("www.example.com"))
+                links = Links(Patch("www.example.com"), "www.example.com")
             )
         )
 
@@ -76,7 +77,7 @@ class SpaceXRepositoryImplTest {
             val launchResponse = launchesResponse[index]
             with(launch) {
                 assertThat(missionName).isEqualTo(launchResponse.name)
-                assertThat(missionDate).isEqualTo(launchResponse.date_utc)
+                assert(missionDate.isEqual(DateTime(launchResponse.date_utc)))
                 assertThat(rocketId).isEqualTo(launchResponse.rocket)
             }
         }

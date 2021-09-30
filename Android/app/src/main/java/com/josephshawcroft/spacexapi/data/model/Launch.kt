@@ -12,7 +12,6 @@ data class Launch(
     val wasSuccess: Boolean
 ) {
 
-    //positive means the launch is in the past, negative means the launch is in the future
     fun daysSinceLaunch(): Long {
         val now = DateTime.now()
         val duration = Duration(missionDate, now)

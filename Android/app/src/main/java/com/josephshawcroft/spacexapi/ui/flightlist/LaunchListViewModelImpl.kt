@@ -31,8 +31,7 @@ internal class LaunchListViewModelImpl @Inject constructor(
     private val _launches = MutableLiveData<Response<LaunchesList>>()
 
     @VisibleForTesting
-    val launches
-        get() = _launches
+    val launches : LiveData<Response<LaunchesList>> = _launches
 
     private val _filters = MutableLiveData<List<LaunchFilter>>(emptyList())
     private val _filteredLaunches =
@@ -53,8 +52,7 @@ internal class LaunchListViewModelImpl @Inject constructor(
     private val _companyInfo = MutableLiveData<Response<CompanyInfo>>()
 
     @VisibleForTesting
-    val companyInfo
-        get() = _companyInfo
+    val companyInfo : LiveData<Response<CompanyInfo>> = _companyInfo
 
     override val viewState: LiveData<ViewState> =
         CombinedLiveData<Response<LaunchesList>, Response<CompanyInfo>, ViewState>(
@@ -77,7 +75,8 @@ internal class LaunchListViewModelImpl @Inject constructor(
         fetchLaunchList()
     }
 
-    override fun fetchCompanyInfo() {
+    @VisibleForTesting
+    fun fetchCompanyInfo() {
         repository.fetchCompanyInfo()
             .applyIoToMainObservable()
             .doOnSubscribe { _companyInfo.value = IsLoading() }
@@ -89,7 +88,8 @@ internal class LaunchListViewModelImpl @Inject constructor(
             .addToDisposables()
     }
 
-    override fun fetchLaunchList() {
+    @VisibleForTesting
+    fun fetchLaunchList() {
         Single.zip<List<Launch>, List<Rocket>, LaunchesList>(
             repository.fetchLaunches(),
             repository.fetchRockets(),
