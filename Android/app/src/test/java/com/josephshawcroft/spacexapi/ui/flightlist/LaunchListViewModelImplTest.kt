@@ -205,9 +205,6 @@ class LaunchListViewModelImplTest {
         viewModel.launches.assertIsSuccessAndEqualTo(expectedMergedResult)
     }
 
-
-    //TODO properly test fetchData- ie ACTUALLY CALL THE METHOD!!!
-
     @Test
     fun givenViewModel_whenFetchDataCalledAndBothFetchLaunchListAndFetchCompanyInfoSucceed_thenViewStateIsLoaded() {
 
