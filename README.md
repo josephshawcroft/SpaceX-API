@@ -22,4 +22,4 @@ Given more time there's numerous improvements I'd make to the codebase:
 - Add caching/persistence. Would do this using Room- the API response can be stored locally.
 - Extracting some of the logic out of the DialogFragment into the VM- for example the logic for deducing the date range filter could be extracted
 - Tests for the FilterVM logic
-- Minor improvements to the LaunchVM - for example I could pass the Schedulers via DI and make sure that the calls are happening on the correct threads. Could also add tests for the filters to make sure they are filtering the response as expectecxd
+- Minor improvements to the LaunchVM - for example I could pass the Schedulers via DI and make sure that the calls are happening on the correct threads. Could also add tests for the filters to make sure they are filtering the response as expected
