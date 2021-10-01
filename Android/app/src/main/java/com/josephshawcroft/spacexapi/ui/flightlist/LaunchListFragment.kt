@@ -128,5 +128,4 @@ class LaunchListFragment : BaseFragment<FragmentLaunchListBinding>(), LaunchList
         adapter = null
         super.onDestroyView()
     }
-
 }

@@ -106,8 +106,20 @@ internal class LaunchListViewModelImpl @Inject constructor(
             .addToDisposables()
     }
 
-    override fun setFilters(vararg filters: LaunchFilter) {
-        _filters.value = listOf(*filters)
+    override fun addFilter(filter: LaunchFilter) {
+        val filters = _filters.value.orEmpty()
+
+        val classToReplace = when (filter) {
+            is YearFilter -> YearFilter::class.java
+            is SuccessFilter -> SuccessFilter::class.java
+        }
+
+        val replacedList = filters.filterNot { it.javaClass == classToReplace}
+        _filters.value = replacedList + filter
+    }
+
+    override fun clearFilters() {
+        _filters.value = emptyList()
     }
 
     override fun sortLaunchesBy(ascending: Boolean) {

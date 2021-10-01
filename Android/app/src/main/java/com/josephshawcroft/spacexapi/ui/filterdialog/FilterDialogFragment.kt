@@ -44,7 +44,7 @@ class FilterDialogFragment : DialogFragment() {
         }
         
         clearFiltersButton.setOnClickListener {
-            launchViewModel.setFilters() // clears launch VM filters
+            launchViewModel.clearFilters()
 
             fromYear.text.clear()
             toYear.text.clear()
@@ -108,12 +108,11 @@ class FilterDialogFragment : DialogFragment() {
 
         val fromDate = DateTime().withDate(fromYear, 1, 1).withTimeAtStartOfDay()
         val toDate = DateTime().withDate(toYear + 1, 1, 1).withTimeAtStartOfDay()
-        launchViewModel.setFilters(YearFilter(fromDate to toDate))
+
+        launchViewModel.addFilter(YearFilter(fromDate to toDate))
     }
 
-    private fun setFilters(vararg filters: LaunchFilter) = launchViewModel.setFilters(*filters)
-
-    private fun addFilter(filter: LaunchFilter) = launchViewModel.setFilters(filter)
+    private fun addFilter(filter: LaunchFilter) = launchViewModel.addFilter(filter)
 
     private fun onSortRadioButtonClicked(view: View) = when (view.id) {
         R.id.sortAscending -> {

@@ -8,7 +8,9 @@ interface LaunchListViewModel {
 
     fun fetchPageData()
 
-    fun setFilters(vararg filters: LaunchFilter)
+    fun addFilter(filter: LaunchFilter)
+
+    fun clearFilters()
 
     fun sortLaunchesBy(ascending: Boolean)
 }
